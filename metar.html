@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>24EFB - METAR</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      background: #111;
+      color: white;
+    }
+
+    .sidebar {
+      width: 200px;
+      background: #007BFF;
+      display: flex;
+      flex-direction: column;
+      padding-top: 20px;
+    }
+
+    .sidebar a {
+      padding: 15px;
+      text-decoration: none;
+      color: white;
+      display: block;
+      transition: background 0.2s;
+    }
+
+    .sidebar a:hover {
+      background: #0056b3;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      background: #007BFF;
+      display: flex;
+    }
+
+    .topbar a {
+      padding: 15px;
+      text-decoration: none;
+      color: white;
+      flex: 1;
+      text-align: center;
+      transition: background 0.2s;
+    }
+
+    .topbar a:hover {
+      background: #0056b3;
+    }
+
+    .content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .content h1 {
+      color: #00aaff;
+    }
+
+    .metar-box {
+      margin-top: 20px;
+      padding: 15px;
+      background: #1a1a1a;
+      border-left: 4px solid #007BFF;
+      white-space: pre-line;
+    }
+
+    .airport-input {
+      margin-top: 15px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .airport-input input {
+      padding: 8px;
+      border: none;
+      border-radius: 4px;
+    }
+
+    .airport-input button {
+      padding: 8px 15px;
+      border: none;
+      background: #007BFF;
+      color: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .airport-input button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <a href="24spy.html">24Spy</a>
+    <a href="atis.html">ATIS</a>
+    <a href="metar.html">METAR</a>
+    <a href="24quickcharts.html">24QuickCharts</a>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="credits.html">Credits</a>
+    </div>
+
+    <div class="content">
+      <h1>METAR Information</h1>
+      <p>Enter ICAO code to get METAR:</p>
+
+      <div class="airport-input">
+        <input type="text" id="icaoInput" placeholder="e.g. LEMD" maxlength="4">
+        <button onclick="getMETAR()">Get METAR</button>
+      </div>
+
+      <div id="metarBox" class="metar-box">No data loaded yet.</div>
+    </div>
+  </div>
+
+  <script>
+    async function getMETAR() {
+      const icao = document.getElementById("icaoInput").value.toUpperCase();
+      const metarBox = document.getElementById("metarBox");
+
+      if (!icao) {
+        metarBox.textContent = "❌ Please enter an ICAO code.";
+        return;
+      }
+
+      try {
+        const apiKey = "OfV6wlwMNIt0Bmytj3vSJWgOUEHdSlf0";
+        const url = `https://api.metar-taf.com/metar?api_key=${apiKey}&v=2.3&locale=en-US&id=${icao}`;
+
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("METAR not found");
+
+        const data = await response.json();
+
+        // Display the raw METAR or the formatted text if available
+        metarBox.textContent = data.raw_text || JSON.stringify(data, null, 2);
+      } catch (err) {
+        metarBox.textContent = "⚠️ Unable to fetch METAR for " + icao;
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>

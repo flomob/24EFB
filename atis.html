@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>24EFB - ATIS</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      background: #111;
+      color: white;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 200px;
+      background: #007BFF;
+      display: flex;
+      flex-direction: column;
+      padding-top: 20px;
+    }
+
+    .sidebar a {
+      padding: 15px;
+      text-decoration: none;
+      color: white;
+      display: block;
+      transition: background 0.2s;
+    }
+
+    .sidebar a:hover {
+      background: #0056b3;
+    }
+
+    /* Main content wrapper */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top bar */
+    .topbar {
+      background: #007BFF;
+      display: flex;
+    }
+
+    .topbar a {
+      padding: 15px;
+      text-decoration: none;
+      color: white;
+      flex: 1;
+      text-align: center;
+      transition: background 0.2s;
+    }
+
+    .topbar a:hover {
+      background: #0056b3;
+    }
+
+    /* Content area */
+    .content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .content h1 {
+      color: #00aaff;
+    }
+
+    .atis-box {
+      margin-top: 20px;
+      padding: 15px;
+      background: #1a1a1a;
+      border-left: 4px solid #007BFF;
+      white-space: pre-line;
+    }
+
+    .atis-editor {
+      margin-top: 10px;
+      font-size: 0.9em;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <a href="24spy.html">24Spy</a>
+    <a href="atis.html">ATIS</a>
+    <a href="metar.html">METAR</a>
+    <a href="24quickcharts.html">24QuickCharts</a>
+  </div>
+
+  <!-- Main area -->
+  <div class="main">
+    <!-- Topbar -->
+    <div class="topbar">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="credits.html">Credits</a>
+    </div>
+
+    <!-- Page content -->
+    <div class="content">
+      <h1>ATIS Information</h1>
+      <div id="atisBox" class="atis-box">Connecting to ATIS server...</div>
+      <div id="atisEditor" class="atis-editor"></div>
+    </div>
+  </div>
+
+  <script>
+    let socket;
+
+    function connectWebSocket() {
+      socket = new WebSocket("wss://24data.ptfs.app/wss");
+
+      socket.onopen = () => {
+        console.log("✅ Connected to ATIS WebSocket");
+        document.getElementById("atisBox").textContent = "Connected. Waiting for ATIS updates...";
+      };
+
+      socket.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+
+          // Only handle ATIS messages
+          if (data.type === "atis") {
+            const atisBox = document.getElementById("atisBox");
+            atisBox.innerHTML = data.lines.join("\n");
+
+            const atisEditor = document.getElementById("atisEditor");
+            atisEditor.textContent = "Last updated by: " + (data.editor || "Unknown");
+          }
+        } catch (e) {
+          console.error("⚠️ Error parsing ATIS:", e);
+        }
+      };
+
+      socket.onclose = () => {
+        console.log("⚠️ ATIS WebSocket closed. Reconnecting in 5s...");
+        document.getElementById("atisBox").textContent = "Disconnected. Reconnecting...";
+        setTimeout(connectWebSocket, 5000);
+      };
+
+      socket.onerror = (err) => {
+        console.error("❌ WebSocket error:", err);
+        socket.close();
+      };
+    }
+
+    connectWebSocket();
+  </script>
+</body>
+</html>
