@@ -1,8 +1,8 @@
 {
-	"folders": [
-		{
-			"path": "../VSC 24EFB"
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {}
 }

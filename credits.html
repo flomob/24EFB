@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>24EFB - Credits</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      background: #111;
+      color: white;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 200px;
+      background: #007BFF; /* Blue */
+      display: flex;
+      flex-direction: column;
+      padding-top: 20px;
+    }
+
+    .sidebar a {
+      padding: 15px;
+      text-decoration: none;
+      color: white;
+      display: block;
+      transition: background 0.2s;
+    }
+
+    .sidebar a:hover {
+      background: #0056b3; /* Darker blue */
+    }
+
+    /* Main content wrapper */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top bar */
+    .topbar {
+      background: #007BFF;
+      display: flex;
+    }
+
+    .topbar a {
+      padding: 15px;
+      text-decoration: none;
+      color: white;
+      flex: 1;
+      text-align: center;
+      transition: background 0.2s;
+    }
+
+    .topbar a:hover {
+      background: #0056b3;
+    }
+
+    /* Content area */
+    .content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .content h1 {
+      color: #00aaff;
+    }
+
+    .credits-list {
+      margin-top: 20px;
+      list-style: none;
+      padding: 0;
+    }
+
+    .credits-list li {
+      padding: 10px;
+      background: #1a1a1a;
+      border-left: 4px solid #007BFF;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <a href="24spy.html">24Spy</a>
+    <a href="atis.html">ATIS</a>
+    <a href="metar.html">METAR</a>
+    <a href="24quickcharts.html">24QuickCharts</a>
+  </div>
+
+  <!-- Main area -->
+  <div class="main">
+    <!-- Topbar -->
+    <div class="topbar">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="credits.html">Credits</a>
+    </div>
+
+    <!-- Page content -->
+    <div class="content">
+      <h1>Credits</h1>
+      <p>We’d like to thank the following people and projects that made <strong>24EFB</strong> possible:</p>
+
+      <ul class="credits-list">
+        <li><strong>flory_11</strong> – Main Developer</li>
+        <li><strong>24DATA</strong> – APIs</li>
+        <li><strong>henpal</strong> – 24QuickCharts website</li>
+        <li><strong>Tico</strong> – 24SPY</li>
+      </ul>
+
+      <p style="margin-top: 30px;">⚡ Special thanks to the PTFS pilots who inspired the creation of 24EFB!</p>
+    </div>
+  </div>
+</body>
+</html>
